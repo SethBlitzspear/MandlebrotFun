@@ -1,0 +1,109 @@
+﻿<Window x:Class="MandlebrotFun.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MandlebrotFun"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Border BorderBrush="Black" BorderThickness="1" Margin="1">
+                <StackPanel Orientation="Vertical" >
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="1" Width="94">
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Prime Node" Height="25" Margin="1" HorizontalAlignment="Center"/>
+
+                            <Border BorderBrush="Black"  Width="90" Height="27" Margin="1" BorderThickness="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Real" Width="30" Height="25"  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Background="#FFFFA0A0"/>
+                                    <TextBox x:Name="PrimeRealValue" Width="30" Height="25" Text="{Binding PrimeRealValue, Mode=OneWay}" FontSize="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="PrimeRealValue_TextChanged" />
+                                    <Image x:Name="PrimeRealPartLock" Width="25" Height="25" Margin="1" Source="{Binding PrimeRealPadlock}" MouseDown="PrimeRealPartLock_MouseDown" />
+                                </StackPanel>
+                            </Border>
+                            <Border BorderBrush="Black"  Width="90" Height="27" Margin="1" BorderThickness="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="i" Width="30" Height="25"  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Background="#FFFFA0A0"/>
+                                    <TextBox x:Name="PrimeImaginaryValue" Width="30" Height="25" Text="{Binding PrimeImaginaryValue, Mode=OneWay}" FontSize="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="PrimeImaginaryValue_TextChanged" />
+                                    <Image x:Name="PrimeImaginaryPartLock" Width="25" Height="25" Margin="1" Source="{Binding PrimeImaginaryPadlock}" MouseDown="PrimeImaginaryPartLock_MouseDown" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="1" Width="94">
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Offset" Height="25" Margin="1" HorizontalAlignment="Center"/>
+
+                            <Border BorderBrush="Black"  Width="90" Height="27" Margin="1" BorderThickness="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="Real" Width="30" Height="25"  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Background="#FFFFA0A0"/>
+                                    <TextBox x:Name="OffsetRealValue" Width="30" Height="25" Text="{Binding OffsetRealValue, Mode=OneWay}" FontSize="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OffsetRealValue_TextChanged" />
+                                    <Image x:Name="OffsetRealPartLock" Width="25" Height="25" Margin="1" Source="{Binding OffsetRealPadlock}" MouseDown="OffsetRealPartLock_MouseDown" />
+                                </StackPanel>
+                            </Border>
+                            <Border BorderBrush="Black"  Width="90" Height="27" Margin="1" BorderThickness="1">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label Content="i" Width="30" Height="25"  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Background="#FFFFA0A0"/>
+                                    <TextBox x:Name="OffsetImaginaryValue" Width="30" Height="25" Text="{Binding OffsetImaginaryValue, Mode=OneWay}" FontSize="10" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" TextChanged="OffsetImaginaryValue_TextChanged" />
+                                    <Image x:Name="OffsetImaginaryPartLock" Width="25" Height="25" Margin="1" Source="{Binding OffsetImaginaryPadlock}" MouseDown="OffsetImaginaryPartLock_MouseDown" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="1" Width="94">
+                        <Label Content="{Binding DivergentText}" Width="92" Height="25" Margin="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Background="#FFFFA0A0"/>
+                    </Border>
+                    <Border BorderBrush="Black" BorderThickness="1" Margin="1" Width="94">
+                        <Label Content="{Binding PlotText}" Width="92" Height="25" Margin="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="10" Background="#FFFFA0A0" MouseDown="Label_MouseDown"/>
+                    </Border>
+                    <Button x:Name="PlotButton" Content="Julia BG"  Click="PlotButton_Click" Width="94" Height="25" Margin="1" />
+                    <Button x:Name="MandlebrotPlot" Content="Mandlebrot BG"  Click="MandlebrotPlot_Click" Width="94" Height="25" Margin="1" />
+                </StackPanel>
+            </Border>
+
+
+
+            
+        </Grid>
+
+        <ItemsControl Grid.Column="1" x:Name="PlotItemsControl" ItemsSource="{Binding PlotItems}">
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas x:Name="PlotCanvas" MouseMove="PlotCanvas_MouseMove" MouseLeftButtonUp="PlotCanvas_MouseLeftButtonUp" MouseLeftButtonDown="PlotCanvas_MouseLeftButtonDown" SizeChanged="PlotCanvas_SizeChanged">
+                        <Canvas.Background>
+                            <ImageBrush ImageSource="{Binding CanvasImage}" />
+                        </Canvas.Background>
+
+                    </Canvas>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="FrameworkElement" >
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsEllipse}" Value="True">
+                            <Setter Property="Canvas.Left" Value="{Binding XPos}" />
+                            <Setter Property="Canvas.Top" Value="{Binding YPos}" />
+                        </DataTrigger>
+                    </Style.Triggers>
+
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type local:GraphEllipseVM}">
+                    <Ellipse Width="{Binding Width}" Height="{Binding Height}" Fill="{Binding StrokeColor}" IsHitTestVisible="False" MouseLeftButtonUp="PlotCanvas_MouseLeftButtonUp" />
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type local:GraphLineVM}">
+                    <Line X1="{Binding X1}" Y1="{Binding Y1}" X2="{Binding X2}" Y2="{Binding Y2}" Stroke="Black"   MouseLeftButtonUp="PlotCanvas_MouseLeftButtonUp"  />
+                </DataTemplate>
+            </ItemsControl.Resources>
+        </ItemsControl>
+      
+    </Grid>
+</Window>
